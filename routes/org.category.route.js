@@ -1,10 +1,10 @@
 let express=require('express');
 let route=express.Router();
-let controller=require('../controller/controller');
+let controller=require('../controller/org.category.controller');
 //let {tokendecode,sec}=require('../middleware/userdata');
 
 
 
-route.post('/signup',controller.organization_category);
+route.get('/aad-org-category',controller.organization_category);
 
 module.exports=route;

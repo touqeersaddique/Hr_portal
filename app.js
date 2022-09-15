@@ -1,10 +1,10 @@
 let express=require('express');
 let mongoose=require('mongoose');
-var bodyparser = require("body-parser");
+var bodyParser = require("body-parser");
 let app=express();
 app.use(express.json());
-let route=require('./routes/route')
-app.use(bodyparser.json());
+let route=require('./routes/org.category.route')
+app.use(bodyParser.json());
 mongoose.connect("mongodb://0.0.0.0:27017/HR-PORTAL"
 , { useNewUrlParser: true,useUnifiedTopology:true }, (err) => {
     if (err) 

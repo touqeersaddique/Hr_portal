@@ -3,8 +3,8 @@ let mongoose=require('mongoose');
 //var jwt=require('jsonwebtoken')
 let app=express();
 let csvtojson=require('csvtojson');
-let {organization}=require('../model/model');
-const { post } = require('../routes/route');
+let {organization}=require('../model/org.category.model');
+const { post } = require('../routes/org.category.route');
 
 let organization_category=async (req,res)=>{
     // res.send("all good")
@@ -15,10 +15,10 @@ let organization_category=async (req,res)=>{
     .then(csvdata=>{
         console.log(csvdata)
         organization.insertMany(csvdata).then(function(){
-            console.log("all ok")
+            res.status(200).json("Data Saved")
         })
     }).catch(function(error){
-        console.log("error")
+        res.status(500).json("Error")
     })
         
 }
