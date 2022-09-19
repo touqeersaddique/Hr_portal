@@ -1,12 +1,10 @@
-your gitignore file should looks like this
-/dist
-/tmp
-/node_modules
+# your gitignore file should looks like this
+
+/node*modules
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
+.history/\_
 package-lock.json
-/.angular/*
