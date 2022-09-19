@@ -2,63 +2,51 @@ let express = require("express");
 let mongoose = require("mongoose");
 let app = express();
 let csvtojson = require("csvtojson");
-let { organizationtype, users } = require("../model/org.category.model");
-//const { post } = require("../routes/org.category.route");
+let { organizationtype } = require("../model/org.category.model");
 
-let organization_category = async (req, res) => {
-  // res.send("all good")
-
-  // };
-  csvtojson()
-    .fromFile("data.csv")
-    .then((csvdata) => {
-      console.log(csvdata);
-      organizationtype.insertMany(csvdata).then(function () {
-        res.status(200).json("Data Saved");
+let organizationCategory = async (req, res) => {
+  try {
+    csvtojson()
+      .fromFile("data.csv")
+      .then(async (csvdata) => {
+        for (let i = 0; i <= csvdata.length; i++) {
+          await organizationtype.find(csvdata[i]).then(async (data, err) => {
+            // console.log("this is csvdatas",csvdata[i])
+            //console.log("skjdnvjkdsmfnsdklfmn",data);
+            //console.log("csv",csvdata[i].organization_category);
+            if (data) {
+              return res.status(406).json({
+                message: "Data Already Exist",
+                data: data.organization_category,
+              });
+              // console.log('====> This is the response',data.organization_category)
+              // res.status(406).json({
+              //     message:"Data already exist"
+              // })
+            } else {
+              // console.log('Not found');
+              var cat = new organizationtype(csvdata[i]);
+              //console.log(cat)
+              await cat.save(csvdata[i]);
+              // return res.status(200).json({
+              //     message:"Data Saved",
+              //     data:data.organization_category
+              // })
+              // res.send("this is else")
+              console.log("this is else");
+            }
+          });
+        }
+        return res.status(200).json({
+          message: "Data Saved Successfully",
+        });
       });
-    })
-    .catch(function (error) {
-      res.status(500).json("Error");
+  } catch (error) {
+    return res.status(404).json({
+      isError: true,
+      message: error.message,
     });
+  }
 };
 
-async function organization(req, res) {
-  try {
-    let organizationName = req.body.organization;
-    let organizationAddress = req.body.organizationAddress;
-    let subscriptionPlan = req.body.subscriptionPlan;
-    let logo = req.body.logo;
-    let subDomain = req.body.subDomain;
-    let organizationType_id = req.body.organizationCategory;
-    console.log(
-      organizationName,
-      organizationAddress,
-      subscriptionPlan,
-      logo,
-      subDomain,
-      organizationType_id
-    );
-    let value = new users({
-      organizationName: organizationName,
-      organizationAddress: organizationAddress,
-      subscriptionPlan: subscriptionPlan,
-      logo: logo,
-      subDomain: subDomain,
-      organizationType_id: organizationType_id,
-    });
-
-    await value.save();
-    res.status(200).send(" sucess");
-  } catch (error) {
-    res.status(404).json(error.message);
-  }
-}
-async function viewOrganization(req, res) {
-  let organizationType_id = req.body.organization;
-  let view = await users.findById(organizationType_id);
-  console.log(view.organizationType_id);
-  let view2 = await organizationtype.findById(view.organizationType_id);
-  res.json(view2);
-}
-
-module.exports = { organization, organization_category, viewOrganization };
+module.exports = { organizationCategory };

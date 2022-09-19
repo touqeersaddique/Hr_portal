@@ -1,10 +1,10 @@
 var express = require("express");
-const controller = require("../controller/org.category.controller");
-const { Router } = require("express");
+const orgCategorycontroller = require("../controller/org.category.controller");
+const orgController = require("../controller/org.controller");
 
 var route = express.Router();
 
-route.post("/organization", controller.organization);
-route.get("/aad-org-category", controller.organization_category);
-route.get("/view", controller.viewOrganization);
+route.post("/api/organization", orgController.organization);
+route.get("/api/aad-org-category", orgCategorycontroller.organizationCategory);
+route.get("/api/view-organization", orgController.viewOrganization);
 module.exports = route;
